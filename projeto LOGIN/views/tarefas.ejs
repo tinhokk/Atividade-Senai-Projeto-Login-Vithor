@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+
+<title>Minhas tarefas</title>
+
+
+<style>
+
+
+body{
+
+margin:0;
+
+font-family:Arial;
+
+background:#f2f5f9;
+
+}
+
+
+
+.container{
+
+width:80%;
+
+margin:40px auto;
+
+}
+
+
+
+h1{
+
+text-align:center;
+
+color:#333;
+
+}
+
+
+
+.nome{
+
+text-align:center;
+
+color:#555;
+
+}
+
+
+
+.topo{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+
+
+.botao{
+
+background:#0d6efd;
+
+color:white;
+
+padding:14px 25px;
+
+border-radius:10px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+
+
+.botao:hover{
+
+background:#084298;
+
+}
+
+
+
+
+.tarefa{
+
+background:white;
+
+padding:25px;
+
+border-radius:15px;
+
+margin-bottom:20px;
+
+box-shadow:0 5px 15px #0002;
+
+}
+
+
+
+.tarefa h2{
+
+color:#0d6efd;
+
+}
+
+
+
+.contador{
+
+font-weight:bold;
+
+color:#dc3545;
+
+}
+
+
+
+.concluir{
+
+display:inline-block;
+
+margin-top:15px;
+
+background:#198754;
+
+color:white;
+
+padding:10px 20px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+}
+
+
+
+.concluir:hover{
+
+background:#146c43;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+
+<h1>
+Minhas tarefas da semana
+</h1>
+
+
+<p class="nome">
+
+Olá, <b><%= nome %></b>
+
+</p>
+
+
+
+
+<div class="topo">
+
+
+<h2>
+Tarefas pendentes
+</h2>
+
+
+<a class="botao" href="/tarefas/nova">
+
+➕ Adicionar tarefa
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<% if(tarefas.length===0){ %>
+
+
+<div class="tarefa">
+
+<h3>
+Nenhuma tarefa cadastrada.
+</h3>
+
+</div>
+
+
+<% } %>
+
+
+
+
+
+
+
+<% tarefas.forEach(tarefa=>{ %>
+
+
+
+<div class="tarefa">
+
+
+<h2>
+
+<%= tarefa.titulo %>
+
+</h2>
+
+
+
+<p>
+
+<%= tarefa.descricao %>
+
+</p>
+
+
+
+
+<p>
+
+📅 
+<%= tarefa.data_tarefa %>
+
+</p>
+
+
+
+<p>
+
+⏰
+
+<%= tarefa.horario %>
+
+</p>
+
+
+
+
+<p class="contador"
+
+data-data="<%= tarefa.data_tarefa %>"
+
+data-hora="<%= tarefa.horario %>">
+
+Calculando...
+
+</p>
+
+
+
+
+<a class="concluir"
+
+href="/tarefas/concluir/<%= tarefa.id %>">
+
+✔ Concluir
+
+</a>
+
+
+
+
+</div>
+
+
+
+<% }) %>
+
+
+
+
+
+
+
+
+<script>
+
+
+function atualizar(){
+
+
+document.querySelectorAll(".contador")
+
+.forEach(item=>{
+
+
+let data=item.dataset.data;
+
+let hora=item.dataset.hora;
+
+
+
+let final=new Date(
+
+data+"T"+hora
+
+);
+
+
+
+let agora=new Date();
+
+
+
+let distancia=final-agora;
+
+
+
+if(distancia<=0){
+
+item.innerHTML="Expirada";
+
+return;
+
+}
+
+
+
+let dias=Math.floor(
+
+distancia/(1000*60*60*24)
+
+);
+
+
+
+let horas=Math.floor(
+
+(distancia%(1000*60*60*24))
+
+/
+
+(1000*60*60)
+
+);
+
+
+
+let minutos=Math.floor(
+
+(distancia%(1000*60*60))
+
+/
+
+(1000*60)
+
+);
+
+
+
+item.innerHTML=
+
+`Faltam ${dias} dias, ${horas} horas e ${minutos} minutos`;
+
+
+
+});
+
+
+}
+
+
+
+atualizar();
+
+setInterval(atualizar,1000);
+
+
+
+</script>
+
+
+
+</div>
+
+
+</body>
+
+</html>
